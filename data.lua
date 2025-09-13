@@ -60,6 +60,15 @@ end
 --To do refined concrete, we need to buff its water cost (less cost), since vulc is now the only place that wants to scale it.
 rebalance_lib.recipe_cost_magnifier("refined-concrete", 0.6, "water")
 
+
+--Speed modules weaker, to be less crazy busted in quality.
+local speed3 = data.raw.module["speed-module-3"]
+if speed3 then speed3.effect.speed = 0.4 end --From 0.5
+
+--Prod modules weaker, to be less crazy busted in quality.
+local prod3 = data.raw.module["productivity-module-3"]
+if prod3 then prod3.effect.productivity = 0.08 end --From 0.1
+
 --#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Fulgora
 

@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.69.2
+Date: ????
+  Changes:
+    - Speed3 and prod3 modules slightly nerfed.
+    - LDS shuffle and blue chip prod spam both nerfed.
+---------------------------------------------------------------------------------------------------
 Version: 0.69.1
 Date: ????
   Changes:

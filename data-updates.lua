@@ -11,6 +11,20 @@ for _, entry in pairs(data.raw.beacon) do
     end
 end
 
+--Set the given recipe prototype's max prod to that value, while respecting any limits from before.
+local function set_max_prod(recipe_name, value)
+    local recipe = data.raw.recipe[recipe_name]
+    if not recipe then return end
+    local old_max = recipe.maximum_productivity or 999999
+    recipe.maximum_productivity = math.min(old_max, value)
+end
+--Make LDS shuffle and blue circuits cap out to avoid infinite free quality stuff
+local NEW_MAX_PROD = 2.75
+set_max_prod("low-density-structure", NEW_MAX_PROD)
+set_max_prod("casting-low-density-structure", NEW_MAX_PROD)
+set_max_prod("processing-unit", NEW_MAX_PROD)
+
+
 --#endregion
 --#region Fulgora
 
