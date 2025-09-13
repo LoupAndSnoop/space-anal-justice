@@ -2,23 +2,41 @@
 Reach me fastest on Discord.
 ---
 
-This is a Space Age rebalance mod. It changes several key points of balance without fundamentally changing the complexity.
+This is a Space Age rebalance mod. It changes several key points of balance without fundamentally changing the complexity. It should not be added mid-playthrough, and it is opinionated.
 
 # Changes
 
 Vulcanus:
-- Vulcanus petrochemistry is supposed to be its weakness, coal liquefaction is now weaker.
-- Metallurgic science never made sense with Vulcanus' theme. So now its recipe is all about big scale metal casting.
+- Coal liquefaction is now weaker (slower amd less output), because Vulcanus petrochemistry is supposed to be its weakness.
+- Metallurgic science recipe changed to be about big scale metal casting.
 
 Fulgora:
 - Holmium is more abundant via holmium solution recipe.
+- Several recycler recipes used for voiding are now substantially faster, to aid with scaling things up on Fulgora.
+- Scrap now requires lubricant to mine.
 
 Gleba:
 - Biochamber is much stronger (especially outside Gleba). It has more module slots, more base productivity, and more recipes.
-- Bioflux can now be recycled with jelly/mash (but only on Gleba!) to make quality grinding viable. 
+- Gleba evolution now scales with how many agriculture science packs were made, to guarantee time to defend yourself.
+- To incentivise Glebase-building, agriculture science instead requires plastic, iron bacteria, and rocket fuel. Iron ore can now be recycled by biochamber.
+- Agriculture science is always made fresh.
+- Efficiency module 3 is slightly stronger.
+- Fruit processing now yields very slightly more seeds, to accelerate growth and give more tolerance for new players.
+- Rocket turret now has a bigger range and rockets are faster. This allows rocket turrets to much more effectively defend Gleba.
+- Bioflux can now be recycled with jelly/mash (but only on Gleba!) to make quality grinding viable.
 
 Aquilo:
 - Cryo plant can now make chemical science.
+- Railgun damage reesearch now needs cryo science packs.
+- Regular labs can no longer use cryogenic/promethium science packs.
+
+Space:
+- Crushers now have a small bit of negative quality bonus. Space casinos are still doable and viable, but don't pop off as hard.
+- Productivity no longer applies to the asteroid chunk that you get back out from a crushing or advanced crushing recipe.
+
+Quality:
+- Beacon effect distribution now scales less with quality.
+
 
 # Notes
 

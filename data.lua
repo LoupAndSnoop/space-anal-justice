@@ -1,15 +1,15 @@
+local rebalance_lib = require("__space-anal-justice__.rebalance-lib")
+
+--#region General
 
 
-local rebalance_lib = require("__anal-justice__.rebalance-lib")
-
-
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Nauvis
 
 --Nauvis needs a better niche.
 
 
---#endregion
-
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Vulcanus
 
 ---Vulcanus' main weakness is supposed to be petrochemistry, but it is waaay to easy to scale, 
@@ -60,29 +60,22 @@ end
 --To do refined concrete, we need to buff its water cost (less cost), since vulc is now the only place that wants to scale it.
 rebalance_lib.recipe_cost_magnifier("refined-concrete", 0.6, "water")
 
---#endregion
-
-
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Fulgora
----If you didn't see this coming, you're a dumbass.
-rebalance_lib.recipe_yield_magnifier("holmium-solution", 3)
+
+---More holmium, obviously.
+rebalance_lib.recipe_yield_magnifier("holmium-solution", 2)
 
 --I always thought this was a missed opportunity. Scrap now needs lube (which is trivial to make) to mine
 local scrap = data.raw.resource.scrap
 if scrap and scrap.minable then
     scrap.minable.required_fluid = "lubricant"
+    scrap.minable.fluid_amount = 20
 end
 
---Fulgora needs help voiding things more efficiently. It's stupidly hard to scale ANYTHING. I'm going to fix this with some unique scrap recipes.
---TODO
 
-
-
-
---#endregion
-
-
---#region Gleba -----------------------
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+--#region Gleba 
 
 --Gleba is perfect. But it can be even more perfect if the biochamber wasn't so terrible outside gleba. This is going to need
 --a multiple pronged approach. First, it needs to be more powerful when it is used for a recipe, and it also needs more recipes 
@@ -105,10 +98,21 @@ end
 rebalance_lib.add_recipe_category("holmium-solution", "organic")
 rebalance_lib.add_recipe_category("utility-science-pack", "organic")
 rebalance_lib.add_recipe_category("production-science-pack", "organic")
---rebalance_lib.add_recipe_category("promethium-science-pack", "organic")
 
---The enemies are really the worst-balanced part of Gleba. We need to nerf them, because it's really bullshit that you need foreign weaponry to defend yourself once they evolve.
----TODO
+
+--Make fruits yield slightly more seeds, so it is slightly better than breaking even
+local yumako = data.raw.recipe["yumako-processing"]
+if yumako then yumako.results = {
+    {type = "item", name = "yumako-seed", amount = 1, probability = 0.022},
+    {type = "item", name = "yumako-mash", amount = 2}
+}
+end
+local jellynut = data.raw.recipe["jellynut-processing"]
+if jellynut then jellynut.results = {
+    {type = "item", name = "jellynut-seed", amount = 1, probability = 0.022 },
+    {type = "item", name = "jelly", amount = 4}
+}
+end
 
 
 --Fix the poor endgame scaling of Gleba with respect to quality grinding.
@@ -121,17 +125,27 @@ if bioflux_item then bioflux_item.auto_recycle = true end
 
 --Many people don't automate bacteria on gleba. That is extremely lame. Let's fix the science a bit.
 --This recipe is actually easier, but does require you to actually play the damn planet.
-local agri_sci = data.raw.recipe["metallurgic-science-pack"]
+local agri_sci = data.raw.recipe["agricultural-science-pack"]
 if agri_sci then
     agri_sci.ingredients = {
-      {type = "item", name = "iron-bacteria", amount = 1},
-      {type = "item", name = "pentapod-egg", amount = 1}
+      {type = "item", name = "iron-bacteria", amount = 4},
+      --{type = "item", name = "iron-ore", amount = 4},
+      --{type = "item", name = "bioflux", amount = 1},
+      --{type = "item", name = "pentapod-egg", amount = 1}
+      --{type = "item", name = "copper-ore", amount = 2},
+      {type = "item", name = "plastic-bar", amount = 5},
+      {type = "item", name = "rocket-fuel", amount = 1},
     }
+    agri_sci.result_is_always_fresh = true
 end
 
 
---#endregion
+--Efficiency module 3 sucks. Make it stronger.
+local eff3 = data.raw.module["efficiency-module-3"]
+if eff3 then eff3.effect = {consumption = -0.6} end --From -0.5
 
+
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Space
 
 --Productivity should have never applied to 
@@ -155,17 +169,37 @@ local crusher = data.raw["assembling-machine"].crusher
 if crusher then
     crusher.effect_receiver = crusher.effect_receiver or {}
     crusher.effect_receiver.base_effect = crusher.effect_receiver.base_effect or {}
-    crusher.effect_receiver.base_effect.quality = -0.02
+    crusher.effect_receiver.base_effect.quality = -0.04
 end
 
---#endregion
+--[[Pentapod eggs moved to promethium science, because holy shit people keep complaining that these eggs need to stay being scaled.
+local promethium_sci = data.raw.recipe["promethium-science-pack"]
+if promethium_sci then
+    table.insert(promethium_sci.ingredients, 
+    {type = "item", name = "pentapod-egg", amount = 4})
+end
+rebalance_lib.recipe_cost_magnifier("promethium-science-pack", 0.5, "biter-egg")]]
 
-
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Aquilo
 
 --Aquilo is mostly fine. The cryo plant is just a bit limitted in its utility.
 rebalance_lib.add_recipe_category("chemical-science-pack", "cryogenics")
 
+--Railgun damage should need cryo sci
+rebalance_lib.try_add_science_pack_to_tech("cryogenic-science-pack", "railgun-damage-1")
 
+--Regular lab cannot do cryo/promethium sci anymore
+local lab = data.raw.lab.lab
+if lab then
+    for _, sci in pairs({"cryogenic-science-pack", "promethium-science-pack"}) do
+        for i, name in pairs(lab.inputs) do
+            if name == sci then
+                table.remove(lab.inputs, i)
+                break
+            end
+        end
+    end
+end
 
---#endregion
+--#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

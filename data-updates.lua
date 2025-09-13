@@ -1,4 +1,28 @@
+---Changes that depend on other mods
+local rebalance_lib = require("__space-anal-justice__.rebalance-lib")
 
+
+--#region General/Quality
+
+--Module/beacon scaling is way too much. Halve it
+for _, entry in pairs(data.raw.beacon) do
+    if entry.distribution_effectivity_bonus_per_quality_level then 
+        entry.distribution_effectivity_bonus_per_quality_level = 0.5 * entry.distribution_effectivity_bonus_per_quality_level
+    end
+end
+
+--#endregion
+--#region Fulgora
+
+--In order to scale things better on Fulgora, it needs to be easier to void things. 
+rebalance_lib.recipe_time_cost_magnifier("low-density-structure-recycling", 0.5)
+rebalance_lib.recipe_time_cost_magnifier("advanced-circuit-recycling", 0.5)
+rebalance_lib.recipe_time_cost_magnifier("processing-unit-recycling", 0.5)
+rebalance_lib.recipe_time_cost_magnifier("copper-plate-recycling", 0.5)
+rebalance_lib.recipe_time_cost_magnifier("iron-plate-recycling", 0.5)
+
+--#endregion
+--#region Gleba
 
 --Gleba: Bioflux needs a paired self-recycle recipe.
 log(serpent.block(data.raw.recipe["bioflux-recycling"]))
@@ -42,3 +66,61 @@ data:extend({
     unlock_results = false,
 }
 })
+
+--Give gleba a way to void iron ore
+local ore_void = data.raw.recipe["iron-ore-recycling"]
+if ore_void then
+    rebalance_lib.add_recipe_category("iron-ore-recycling", "organic")
+    ore_void.allow_productivity = false
+    ore_void.hidden = false
+    ore_void.hidden_in_factoriopedia = false
+    ore_void.subgroup = "agriculture-processes"
+    ore_void.order = "b[agriculture]-d[bacteria]-a[iron-bacteria]-b"
+end
+
+--The enemies are really the worst-balanced part of Gleba. We need to nerf them, because it's really bullshit that you need foreign weaponry to defend yourself once they evolve.
+--Make rocket turrets more capable of shooting them down normally
+local rocket_turret = data.raw["ammo-turret"]["rocket-turret"]
+if rocket_turret then
+    rocket_turret.attack_parameters.range = 50 --Default 36
+end
+--Make rockets faster to compensate
+local ROCKET_START_SPEED_MULT = 3
+local ROCKET_ACCEL_MULT = 3
+local projectiles = {}
+for _, entry in pairs(data.raw.ammo) do
+    if entry.ammo_category == "rocket" and entry.ammo_type then
+        --Actions are either an array or one action. Consolidate to array.
+        local to_consider = {}
+        if entry.ammo_type.action then table.insert(to_consider, entry.ammo_type.action)
+        else to_consider = entry.ammo_type end
+
+        for _, action in pairs(to_consider or {}) do
+            if action.action_delivery and action.action_delivery.starting_speed then
+                action.action_delivery.starting_speed = ROCKET_START_SPEED_MULT * action.action_delivery.starting_speed
+            end
+            --Go get its projectile to speed it up
+            if action.action_delivery and action.action_delivery.type == "projectile"
+                and action.action_delivery.projectile then
+                table.insert(projectiles, action.action_delivery.projectile)
+            end
+        end
+    end
+end
+--Make the projectiles themselves also faster
+for _, entry in pairs(projectiles) do
+    local projectile = data.raw["projectile"][entry]
+    if projectile then
+        if projectile.acceleration then projectile.acceleration = projectile.acceleration * ROCKET_ACCEL_MULT end
+        if projectile.turn_speed then projectile.turn_speed = projectile.turn_speed * ROCKET_ACCEL_MULT end
+    end
+end
+--[[
+for name, entry in pairs(data.raw["spider-unit"]) do
+    if string.find(name, "stomper-pentapod",1,true)
+        or string.find(name, "strafer-pentapod",1,true) then 
+        entry.attack_parameters.range = 6.5-- * scale
+    end
+end]]
+
+--#endregion
