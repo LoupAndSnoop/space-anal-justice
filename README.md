@@ -38,7 +38,7 @@ This is a Space Age rebalance mod. It changes several key points of balance with
 
 ## Quality / General:
 - Beacon effect distribution now scales less with quality.
-- Speed3 and Producitivity3 modules slightly nerfed, because they really let you run over unique traits of planets when you have them in quality.
+- Speed3 and Producitivity3 modules very slightly nerfed, because they really let you run over unique traits of planets when you have them in quality.
 - LDS shuffle and processing unit upcycling nerfed by making it's max prod slightly less than 300%. It's still good, but no longer 100% free.
 
 ------------
