@@ -2,6 +2,38 @@ local rebalance_lib = require("__space-anal-justice__.rebalance-lib")
 
 --#region General
 
+--Make it harder to export rocket parts to promote local production of rocket parts.
+for entry, capacity in pairs({["processing-unit"] = 150,
+    ["low-density-structure"] = 100, ["rocket-fuel"] = 40}) do
+    local proto = data.raw.item[entry]
+    if proto then proto.weight = 1000 * kg / capacity
+    end
+end
+
+--Nerf rate of getting infinite productivity.
+--Ignore research and mining prod
+local infinite_prod_techs = {--"research-productivity",
+    "steel-plate-productivity", --"1.5^L*1000",
+    "low-density-structure-productivity", 
+    "plastic-bar-productivity", "rocket-fuel-productivity", "scrap-recycling-productivity", 
+    "processing-unit-productivity", "asteroid-productivity"}
+local NEW_SCALING_EXPONENT = "2.25"
+for _, entry in pairs(infinite_prod_techs) do
+    local tech = data.raw["technology"][entry]
+    if tech and tech.unit and tech.unit.count_formula then
+        --All vanilla count formulas start with the exponent on front as 1.5
+        local exponent_pos = string.find(tech.unit.count_formula, "^", 1, true)
+        local count_formula
+        if not exponent_pos then count_formula = NEW_SCALING_EXPONENT .. "^L*1000" --No exponent found, use default
+        else count_formula = NEW_SCALING_EXPONENT .. string.sub(tech.unit.count_formula, exponent_pos)
+        end
+        tech.unit.count_formula = count_formula
+
+        --log(entry .. " = " .. tostring(count_formula)) --tech.unit.count_formula))
+    end
+end
+
+
 
 --#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 --#region Nauvis
@@ -209,6 +241,19 @@ if lab then
             end
         end
     end
+end
+
+
+local burner_inserter = data.raw.inserter["burner-inserter"]
+if burner_inserter then
+    --Extension/Rotation:
+    --Burner = 0.035/0.013
+    --Inserter = 0.035/0.014
+    --Fast-inserter = 0.1/0.04
+    burner_inserter.extension_speed = 0.07--0.035
+    burner_inserter.rotation_speed = 0.026--0.013
+    burner_inserter.energy_per_movement = "20kJ"--"50kJ",
+    burner_inserter.energy_per_rotation = "20kJ"--"50kJ",
 end
 
 --#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

@@ -39,7 +39,7 @@ rebalance_lib.recipe_time_cost_magnifier("iron-plate-recycling", 0.5)
 --#region Gleba
 
 --Gleba: Bioflux needs a paired self-recycle recipe.
-log(serpent.block(data.raw.recipe["bioflux-recycling"]))
+--log(serpent.block(data.raw.recipe["bioflux-recycling"]))
 
 --Add back in the normal bioflux-recyucling recipe, but lock it so it is NOT locked to gleba.
 
