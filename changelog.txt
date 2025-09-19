@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.3
-Date: ????
+Date: 2025-09-19
   Changes:
     - Rocket capacities of rocket parts are now lower, to promote local production.
     - Infinite productivity techs now scale to be more expensive, to curb snowballing.
