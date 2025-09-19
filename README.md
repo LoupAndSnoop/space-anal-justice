@@ -2,7 +2,7 @@
 Reach me fastest on Discord.
 ---
 
-This is a Space Age rebalance mod. It changes several key points of balance without fundamentally changing the complexity. This mod is opinionated, and made through thorough discussion on discord. *It is best to add this mod before establishing bases on planets beyond Nauvis.* It will otherwise have breaking changes, especially for Gleba/Vulcanus science production.
+This is a Space Age rebalance mod. It changes several key points of balance without fundamentally changing the complexity. This mod is opinionated, and made through thorough discussion on discord. *It is best to add this mod before establishing bases on planets beyond Nauvis.* Else, it may break your Gleba/Vulcanus science production.
 
 ----
 # Change List
@@ -25,6 +25,7 @@ This is a Space Age rebalance mod. It changes several key points of balance with
 - Bioflux can now be recycled with jelly/mash (but only on Gleba!) to make quality grinding of Gleba items easier.
 
 ## Aquilo:
+- Burner inserters are faster and more energy efficient (still inferior to fast inserters).
 - Cryo plant can now make chemical science.
 - Railgun damage research now needs cryo science packs.
 - Regular labs can no longer use cryogenic/promethium science packs.
@@ -38,6 +39,7 @@ This is a Space Age rebalance mod. It changes several key points of balance with
 - Speed module 3 and Productivity module 3 are slightly nerfed, because they let you run over unique traits of planets when you have them in quality.
 - Efficiency module 3 slightly stronger.
 - LDS shuffle and processing unit upcycling nerfed by making their max prod less than 300%. It's still good, but no longer free.
+- Infinite item productivity techs are more expensive to slow down snowballing.
 - Rocket part items (blue chips, rocket fuel, low density structure) have lower rocket capacities, to promote local production of rocket parts on each surface over importing rocket parts.
 
 ------------
