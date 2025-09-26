@@ -22,7 +22,7 @@ This is a Space Age rebalance mod. It changes several key points of balance with
 - Agriculture science instead requires plastic, iron bacteria, and rocket fuel. Iron ore can now be recycled by biochamber. Agriculture science is always made fresh. This incentivises Glebase-building.
 - Fruit processing now yields very slightly more seeds, to accelerate growth and give more tolerance for new players.
 - Rocket turret now has a bigger range and rockets are faster. This allows rocket turrets to much more effectively defend Gleba.
-- Bioflux can now be recycled with jelly/mash (but only on Gleba!) to make quality grinding of Gleba items easier.
+- Bioflux can now be recycled with jelly/mash (but only on Gleba!) to make quality grinding of Gleba items easier. To balance, bioflux max prod is capped, and bioflux recycling yield is lower than normal recycling.
 
 ## Aquilo:
 - Burner inserters are faster and more energy efficient (still inferior to fast inserters).

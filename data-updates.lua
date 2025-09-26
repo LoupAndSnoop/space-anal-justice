@@ -46,11 +46,20 @@ rebalance_lib.recipe_time_cost_magnifier("iron-plate-recycling", 0.5)
 --Bioflux to mash is locked to gleba for quality grinding
 local new_recycling = data.raw.recipe["bioflux-recycling"]
 new_recycling.surface_conditions = {{property = "pressure", min = 2000, max = 2000}}
-new_recycling.results =
-    {
-      {type = "item", name = "yumako-mash", amount = 3, extra_count_fraction = 0.75, ignored_by_stats = 4},
-      {type = "item", name = "jelly", amount = 3, ignored_by_stats = 3,}
-    }
+new_recycling.results = {
+    --This is the standard recycling, which is too good.
+    --{type = "item", name = "yumako-mash", amount = 3, extra_count_fraction = 0.75, ignored_by_stats = 4},
+    --{type = "item", name = "jelly", amount = 3, ignored_by_stats = 3,}
+    --Nerfed recycling, to avoid hardcore snowballing. x2/3 is not enough. Go x0.5
+    {type = "item", name = "yumako-mash", amount = 1, extra_count_fraction = 0.875, ignored_by_stats = 4},
+    {type = "item", name = "jelly", amount = 1, extra_count_fraction = 0.5, ignored_by_stats = 3,}
+
+    --x2/3 is not enough
+    --{type = "item", name = "yumako-mash", amount = 2, extra_count_fraction = 0.25, ignored_by_stats = 4}, --from 3.75
+    --{type = "item", name = "jelly", amount = 2, ignored_by_stats = 3,} --from 3
+}
+
+
 --Bioflux to itself is allowed everywhere else
 data:extend({
 {
@@ -77,9 +86,14 @@ data:extend({
         {amount = 1, ignored_by_stats = 1, name = "bioflux", probability = 0.25, type = "item"}
     },
     subgroup = "agriculture-products",
+    allow_productivity = false,
     unlock_results = false,
 }
 })
+
+--Need to place limits on bioflux to prevent quality scaling from going out of control
+local bioflux = data.raw.recipe.bioflux
+--if bioflux then bioflux.maximum_productivity = 1.6 end
 
 --Give gleba a way to void iron ore
 local ore_void = data.raw.recipe["iron-ore-recycling"]
