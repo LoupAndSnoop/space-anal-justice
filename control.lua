@@ -5,12 +5,12 @@
 --Evolution now scales with science production.
 
 --Combine the total amount of ag science produced, with quality-scaling included.
-local function get_total_science_produced()
+local function get_total_science_consumed()
     local ag_sci = 0
     for _, force in pairs(game.forces) do
         local flow_stats = force.get_item_production_statistics("gleba")
         for quality_name, quality in pairs(prototypes.quality) do
-            ag_sci = ag_sci + (1 + quality.level) * flow_stats.get_input_count{name = "agricultural-science-pack", quality = quality_name}
+            ag_sci = ag_sci + (1 + quality.level) * flow_stats.get_output_count{name = "agricultural-science-pack", quality = quality_name}
         end
     end
     return ag_sci
@@ -38,14 +38,14 @@ script.on_nth_tick(30, function()
     local gleba = game.surfaces["gleba"]
     if not gleba then return end
 
-    local sci = get_total_science_produced()
+    local sci = get_total_science_consumed()
     local evolution = sci_to_evolution(sci)
 
     --for _, force in pairs(game.forces) do force.set_evolution_factor(evolution) end
     local enemy = game.forces["enemy"]
     if enemy then enemy.set_evolution_factor(evolution, gleba) end
 
-    --[[ For testing
+    --[[For testing
     local TEST_OLD_EVO = enemy.get_evolution_factor("gleba")
     enemy.set_evolution_factor(evolution, gleba)
     game.print("Previous evo = " .. tostring(TEST_OLD_EVO) 

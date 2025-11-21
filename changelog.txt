@@ -2,6 +2,7 @@
 Version: 0.69.6
 Date: ????
   Changes:
+    - Gleba evolution now depends on science CONSUMED, instead of produced.
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.5
 Date: 2025-11-17
