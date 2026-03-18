@@ -24,9 +24,10 @@ local function get_total_science_consumed()
 
     --Now actually count it up.
     local ag_sci = 0
+    local surfaces = game.surfaces
     for _, force in pairs(game.forces) do
         if #force.players == 0 then goto skip_force end --Skip forces without players
-        for _, surface in pairs(game.surfaces) do
+        for _, surface in pairs(surfaces) do
             if surface.generate_with_lab_tiles then goto skip_surface end --Skip sandbox zones.
             local flow_stats = force.get_item_production_statistics(surface)
             for quality_name, quality in pairs(relevant_qualities) do
