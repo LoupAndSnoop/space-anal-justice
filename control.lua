@@ -4,14 +4,37 @@
 
 --Evolution now scales with science production.
 
+local MAX_AG_SCI_THRESHOLD = 100000 --Ag sci totals above this number permanently trigger max evo
+
 --Combine the total amount of ag science produced, with quality-scaling included.
 local function get_total_science_consumed()
-    local ag_sci = 0
+    --First find out the relevant qualities in which gleban sci was made
+    local relevant_qualities = {}
     for _, force in pairs(game.forces) do
+        if #force.players == 0 then goto continue end --Skip forces without players
         local flow_stats = force.get_item_production_statistics("gleba")
         for quality_name, quality in pairs(prototypes.quality) do
-            ag_sci = ag_sci + (1 + quality.level) * flow_stats.get_output_count{name = "agricultural-science-pack", quality = quality_name}
+            --Make sure it's above some arbitrary small number
+            if flow_stats.get_input_count{name = "agricultural-science-pack", quality = quality_name} > 10 then
+                relevant_qualities[quality_name] = quality
+            end
         end
+        ::continue::
+    end
+
+    --Now actually count it up.
+    local ag_sci = 0
+    for _, force in pairs(game.forces) do
+        if #force.players == 0 then goto skip_force end --Skip forces without players
+        for _, surface in pairs(game.surfaces) do
+            if surface.generate_with_lab_tiles then goto skip_surface end --Skip sandbox zones.
+            local flow_stats = force.get_item_production_statistics(surface)
+            for quality_name, quality in pairs(relevant_qualities) do
+                ag_sci = ag_sci + (1 + quality.level) * flow_stats.get_output_count{name = "agricultural-science-pack", quality = quality_name}
+            end
+            ::skip_surface::
+        end
+        ::skip_force::
     end
     return ag_sci
 end
@@ -38,7 +61,8 @@ script.on_nth_tick(30, function()
     local gleba = game.surfaces["gleba"]
     if not gleba then return end
 
-    local sci = get_total_science_consumed()
+    local sci = storage.ag_sci_maxed and MAX_AG_SCI_THRESHOLD or get_total_science_consumed()
+    if sci > MAX_AG_SCI_THRESHOLD then storage.ag_sci_maxed = true end
     local evolution = sci_to_evolution(sci)
 
     --for _, force in pairs(game.forces) do force.set_evolution_factor(evolution) end
