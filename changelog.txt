@@ -2,7 +2,7 @@
 Version: 0.69.7
 Date: ????
   Changes:
-    - Fixed a longstanding bug where gleba sci would only count towards evolution if it is consumed on Gleba. I did a lot of UPS optimization on this. My benchmarking showed it consuming 0.1 ms once every 30 ticks. The newest optimization permanently skips this mod's UPS consumption (to 0.008 ms per 30 tick) once you have consumed 100k Gleban science.
+    - Fixed a longstanding bug where gleba sci would only count towards evolution if it is consumed on Gleba. I did a lot of UPS optimization on this. My benchmarking showed it consuming 0.1 ms once every 30 ticks. The newest optimizations permanently skips this mod's UPS consumption (to 0.008 ms per 30 tick) once you have consumed 100k Gleban science AND before you have made any Gleban science.
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.6
 Date: 2025-11-21
