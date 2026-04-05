@@ -112,7 +112,21 @@ local scrap = data.raw.resource.scrap
 if scrap and scrap.minable then
     scrap.minable.required_fluid = "lubricant"
     scrap.minable.fluid_amount = 20
+
+    --Now we also need the ability to mine with fluid if we get to fulgora without mining uranium
+    local recycling = data.raw["technology"]["recycling"]
+    if recycling and recycling.effects then
+        table.insert(recycling.effects,
+            {type = "mining-with-fluid",modifier = true})
+    end
+
+    local discovery = data.raw["technology"]["planet-discovery-fulgora"]
+    if discovery and discovery.prerequisites then
+        table.insert(discovery.prerequisites, "electric-mining-drill")
+    end
 end
+
+
 
 
 --#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

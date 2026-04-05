@@ -93,7 +93,7 @@ data:extend({
 
 --Need to place limits on bioflux to prevent quality scaling from going out of control
 local bioflux = data.raw.recipe.bioflux
---if bioflux then bioflux.maximum_productivity = 1.6 end
+if bioflux then bioflux.maximum_productivity = 1.6 end
 
 --Give gleba a way to void iron ore
 local ore_void = data.raw.recipe["iron-ore-recycling"]
