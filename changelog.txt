@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.8
-Date: ????
+Date: 2026-04-05
   Changes:
     - Fixed that it was possible to get to fulgora without having done uranium mining, making it impossible to mine scrap. The recycling technology now also unlocks mining with fluid.
     - Bioflux productivity was not properly capped before. Now it is capped to +160% productivity.
