@@ -5,7 +5,7 @@ local DEBUG_MODE = true
 ---Get the current average of how much material is actualy consumed/produced on average.
 ---@param material data.ProductPrototype | data.IngredientPrototype Prototype of a specific product.
 local function average_amount(material)
-    local probability = material.probability or 1
+    local probability = material.independent_probability or 1
     local amount = material.amount or ((material.amount_max + material.amount_min) * 0.5)
     if material.extra_count_fraction then amount = material.extra_count_fraction * probability end
     return amount * probability
@@ -33,7 +33,7 @@ local function material_amount_magnify(product, multiplier)
     if product.amount_max and product.amount_min then
         product.amount_max = math.max( product.amount_max, product.amount_min)
     end
-    multiply_continuous("probability")
+    multiply_continuous("independent_probability")
 
     --Multiply the extra count fraction, but if we go over into a whole number, then move it into the actual amount.
     if product.extra_count_fraction then
@@ -137,8 +137,8 @@ function rebalance_lib.add_recipe_category(recipe_name, new_recipe_category_name
     assert(recipe or not DEBUG_MODE, "Did not find: " .. recipe_name)
     if not recipe then return end --Nothing
 
-    if recipe.additional_categories then table.insert(recipe.additional_categories, new_recipe_category_name)
-    else recipe.additional_categories = {new_recipe_category_name} end
+    if recipe.categories then table.insert(recipe.categories, new_recipe_category_name)
+    else recipe.categories = {new_recipe_category_name} end
 end
 
 
@@ -170,10 +170,14 @@ end
 
 
 
+
+
+--#region Technologies
+
 --Remove that science pack from the cost of the given technology (if the tech exists, and if it is there.
 function rebalance_lib.try_add_science_pack_to_tech(science_pack_name, technology_name)
     local tech = data.raw["technology"][technology_name]
-    assert(data.raw.tool[science_pack_name],"No valid science pack found with the name: " .. science_pack_name)
+    assert(data.raw.item[science_pack_name],"No valid science pack found with the name: " .. science_pack_name)
     --assert(tech and tech.unit, "Technology not found: " .. technology_name)
     if (not tech or not tech.unit) then return end --Tech not found
 
@@ -183,6 +187,78 @@ function rebalance_lib.try_add_science_pack_to_tech(science_pack_name, technolog
     table.insert(tech.unit.ingredients, {science_pack_name, 1 })
 end
 
+--Remove the given recipe unlock from that technology, assuming the tech exists. Return TRUE if successful.
+function rebalance_lib.try_remove_recipe_from_tech(recipe_name, technology_name)
+    local tech = data.raw["technology"][technology_name]
+    if not tech then return false end
+
+    for index, entry in pairs(tech.effects or {}) do
+        if entry.type == "unlock-recipe" and entry.recipe == recipe_name then
+            table.remove(tech.effects, index)
+            return true
+        end
+    end
+    return false
+end
+
+--Add the given recipe unlock to that technology, assuming tech exists. Return TRUE if successful.
+function rebalance_lib.try_add_recipe_to_tech(recipe_name, technology_name)
+    --if not data.raw["recipe"][recipe_name] then return false end
+    local tech = data.raw["technology"][technology_name]
+    if not tech then return false end
+    tech.effects = tech.effects or {}
+
+    --Check if it is already present
+    for _, entry in pairs(tech.effects) do
+        if entry.type == "unlock-recipe" and entry.recipe == recipe_name then
+            return false
+        end
+    end
+    table.insert(tech.effects, {type = "unlock-recipe", recipe = recipe_name})
+    return true
+end
+
+--Try to move a recipe unlock from one technology to another. Cancel if the target doesn't exist.
+function rebalance_lib.try_transfer_recipe_unlock_from_to(recipe_name, source_tech_name, target_tech_name)
+    if rebalance_lib.try_add_recipe_to_tech(recipe_name, target_tech_name) then
+        rebalance_lib.try_remove_recipe_from_tech(recipe_name, source_tech_name)
+        return true
+    end
+    return false
+end
+
+--Add the given prereq to that technology, assuming both exist. Return TRUE if successful.
+function rebalance_lib.try_add_prereq_to(prereq_name, technology_name)
+    local tech = data.raw.technology[technology_name] 
+    if not tech then return false end
+    if not data.raw.technology[prereq_name] then return false end
+    tech.prerequisites = tech.prerequisites or {}
+
+    --Check if it is already present
+    for _, entry in pairs(tech.prerequisites) do
+        if entry == prereq_name then return false end
+    end
+    table.insert(tech.prerequisites, prereq_name)
+    return true
+end
+
+--Add the given prereq to that technology, assuming both exist. Return TRUE if successful.
+function rebalance_lib.try_remove_prereq_from(prereq_name, technology_name)
+    local tech = data.raw.technology[technology_name]
+    if not tech then return false end
+    tech.prerequisites = tech.prerequisites or {}
+
+    --Check if present
+    for index, entry in pairs(tech.prerequisites) do
+        if entry == prereq_name then
+            table.remove(tech.prerequisites, index)
+            return true
+        end
+    end
+    return false
+end
+
+--#endregion
 
 
 return rebalance_lib

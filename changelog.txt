@@ -2,6 +2,9 @@
 Version: 0.69.9
 Date: ????
   Changes:
+    - Updated to Factorio v2.1. Let me know if you experience issues.
+    - Editted Gleba's tech tree it make it less like all the technologies are unlocked at once. If you already have a base on Gleba, this change should not affect anything.
+    - Added more tech features to the rebalance lib library, in case other modders use it.
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.8
 Date: 2026-04-05

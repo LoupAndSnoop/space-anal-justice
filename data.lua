@@ -158,13 +158,13 @@ rebalance_lib.add_recipe_category("production-science-pack", "organic")
 --Make fruits yield slightly more seeds, so it is slightly better than breaking even
 local yumako = data.raw.recipe["yumako-processing"]
 if yumako then yumako.results = {
-    {type = "item", name = "yumako-seed", amount = 1, probability = 0.022},
+    {type = "item", name = "yumako-seed", amount = 1, independent_probability = 0.022},
     {type = "item", name = "yumako-mash", amount = 2}
 }
 end
 local jellynut = data.raw.recipe["jellynut-processing"]
 if jellynut then jellynut.results = {
-    {type = "item", name = "jellynut-seed", amount = 1, probability = 0.022 },
+    {type = "item", name = "jellynut-seed", amount = 1, independent_probability = 0.022 },
     {type = "item", name = "jelly", amount = 4}
 }
 end
@@ -184,20 +184,56 @@ local agri_sci = data.raw.recipe["agricultural-science-pack"]
 if agri_sci then
     agri_sci.ingredients = {
       {type = "item", name = "iron-bacteria", amount = 4},
-      --{type = "item", name = "iron-ore", amount = 4},
-      --{type = "item", name = "bioflux", amount = 1},
-      --{type = "item", name = "pentapod-egg", amount = 1}
-      --{type = "item", name = "copper-ore", amount = 2},
       {type = "item", name = "plastic-bar", amount = 5},
       {type = "item", name = "rocket-fuel", amount = 1},
     }
-    agri_sci.result_is_always_fresh = true
+    for _, entry in pairs(agri_sci.results) do
+        entry.always_fresh = true
+    end
 end
 
 
 --Efficiency module 3 sucks. Make it stronger.
 local eff3 = data.raw.module["efficiency-module-3"]
 if eff3 then eff3.effect = {consumption = -0.6} end --From -0.5
+
+----------Change the progression a bit to make it less like unlocking everything at once.
+local ag_sci_tech = data.raw["technology"]["agricultural-science-pack"]
+local biochamber_tech = data.raw["technology"]["biochamber"]
+local heat_tower_tech = data.raw["technology"]["heating-tower"]
+local soil_tech = data.raw["technology"]["artificial-soil"]
+local bacteria_tech = data.raw["technology"]["bacteria-cultivation"]
+local bioflux_proc_tech = data.raw["technology"]["bioflux-processing"]
+
+--Recipe shuffle:
+rebalance_lib.try_transfer_recipe_unlock_from_to("iron-bacteria", "jellynut", "bacteria-cultivation")
+rebalance_lib.try_transfer_recipe_unlock_from_to("copper-bacteria", "yumako", "bacteria-cultivation")
+rebalance_lib.try_transfer_recipe_unlock_from_to("burnt-spoilage", "biochamber", "carbon-fiber")
+
+
+if heat_tower_tech then
+    heat_tower_tech.prerequisites = {"jellynut"}
+    heat_tower_tech.research_trigger = {type = "craft-item", item="jelly", count=400}
+end
+if biochamber_tech then
+    biochamber_tech.prerequisites = {heat_tower_tech.name}
+    biochamber_tech.research_trigger = {type = "craft-item", item="yumako-mash", count=100}
+end
+if soil_tech then
+    soil_tech.research_trigger = {type = "craft-item", item="yumako-seed", count=300}
+end
+if bacteria_tech then
+    bacteria_tech.research_trigger = {type = "craft-item", item="bioflux", count=100}
+end
+if bioflux_proc_tech then
+    bioflux_proc_tech.research_trigger = {type = "craft-item", item="bioflux", count=400}
+end
+if ag_sci_tech then
+    ag_sci_tech.research_trigger = {type = "craft-item", item="iron-bacteria", count=3000}
+    rebalance_lib.try_add_prereq_to(heat_tower_tech.name, ag_sci_tech.name)
+end
+
+
 
 
 --#endregion XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
