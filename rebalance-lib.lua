@@ -138,7 +138,7 @@ function rebalance_lib.add_recipe_category(recipe_name, new_recipe_category_name
     if not recipe then return end --Nothing
 
     if recipe.categories then table.insert(recipe.categories, new_recipe_category_name)
-    else recipe.categories = {new_recipe_category_name} end
+    else recipe.categories = {"crafting", new_recipe_category_name} end
 end
 
 

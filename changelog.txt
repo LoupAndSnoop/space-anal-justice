@@ -2,6 +2,7 @@
 Version: 0.69.10
 Date: ????
   Changes:
+    - Fixed some recipes having their default crafting machines being removed.
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.9
 Date: 2026-06-24
