@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.11
-Date: ????
+Date: 2026-07-17
   Changes:
     - Space casinos are back.
     - Concrete recycling is now faster to account for haz concrete recycling not being viable in 2.1.
