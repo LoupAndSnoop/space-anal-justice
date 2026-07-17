@@ -254,6 +254,13 @@ for _, entry in pairs(processing_recipes) do
     end
 end
 
+--Bring back casinos
+for _, entry in pairs(reprocessing_recipes) do
+    local recipe = data.raw.recipe[entry]
+    if recipe then
+        recipe.allow_quality = true
+    end
+end
 
 --Reign in casinos a little. Casinos are still allowed, but they are getting a nerf.
 local crusher = data.raw["assembling-machine"].crusher

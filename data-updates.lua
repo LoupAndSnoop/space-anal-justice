@@ -34,6 +34,7 @@ rebalance_lib.recipe_time_cost_magnifier("advanced-circuit-recycling", 0.5)
 rebalance_lib.recipe_time_cost_magnifier("processing-unit-recycling", 0.5)
 rebalance_lib.recipe_time_cost_magnifier("copper-plate-recycling", 0.5)
 rebalance_lib.recipe_time_cost_magnifier("iron-plate-recycling", 0.5)
+rebalance_lib.recipe_time_cost_magnifier("concrete-recycling", 0.25)
 
 --#endregion
 --#region Gleba
