@@ -124,7 +124,7 @@ function rebalance_lib.recipe_time_cost_magnifier(recipe_name, multiplier)
     local recipe = data.raw.recipe[recipe_name]
     assert(recipe or not DEBUG_MODE, "Did not find: " .. recipe_name)
     if not recipe then return end --Nothing
-    if recipe.energy_required then recipe.energy_required = recipe.energy_required * multiplier
+    if recipe.energy_required then recipe.energy_required = math.max(0.0011, recipe.energy_required * multiplier)
     end
 end
 
