@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 0.69.12
-Date: ????
+Date: 2026-08-08
   Changes:
     - Added safeguard to recipe modification to ensure all recipe times are within allowed bounds, even if another mod tried to mess with them.
 ---------------------------------------------------------------------------------------------------
